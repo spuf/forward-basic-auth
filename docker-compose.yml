@@ -36,7 +36,7 @@ services:
     command:
       - sh
       - -c
-      - apk add curl && sleep 1 && curl -X PUT 'http://forward-basic-auth:4013/users' --data-raw '{"user":"pass"}'
+      - apk add curl && sleep 1 && curl -X PUT 'http://forward-basic-auth:4013/users' --data-raw '{"user":"pass"}' -v
     depends_on:
       - forward-basic-auth
 

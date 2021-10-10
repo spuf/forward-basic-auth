@@ -103,7 +103,10 @@ func NewServer(cfg config) http.Handler {
 
 	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		status := http.StatusOK
-		http.Error(w, http.StatusText(status), status)
+
+		w.Header().Set("Content-Type", "text/plain")
+		w.WriteHeader(status)
+		fmt.Fprintln(w, http.StatusText(status))
 	})
 
 	r.Put("/users", func(w http.ResponseWriter, r *http.Request) {
