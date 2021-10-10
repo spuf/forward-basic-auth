@@ -17,6 +17,7 @@ RUN go mod download
 RUN go mod verify
 
 COPY . ./
+RUN goa gen github.com/spuf/forward-basic-auth/design
 
 RUN golangci-lint run ./...
 
