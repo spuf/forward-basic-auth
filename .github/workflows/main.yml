@@ -3,12 +3,12 @@ name: Autobuild
 on:
   push:
     branches:
-      - 'master'
+      - 'main'
     tags:
       - 'v*'
   pull_request:
     branches:
-      - 'master'
+      - 'main'
 
 jobs:
   docker:
@@ -22,7 +22,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ghcr.io/spuf/forward-basic-auth
+          images: ghcr.io/${{ github.repository }}
           tags: |
             type=edge
             type=semver,pattern={{version}}
