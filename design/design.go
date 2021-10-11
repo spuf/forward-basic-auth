@@ -16,7 +16,7 @@ var _ = API("forward-basic-auth", func() {
 
 var UsersData = Type("UsersData", MapOf(String, String, func() {
 	Key(func() {
-		Pattern("^[^:]+$")
+		Pattern("^[A-z0-9\\-_]+$")
 		Example("alice")
 	})
 	Elem(func() {
