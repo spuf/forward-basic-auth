@@ -13,32 +13,6 @@ services:
       - traefik.enable=true
       - traefik.http.routers.dashboard.service=api@internal
       - traefik.http.services.dashboard.loadbalancer.server.port=9999
-    depends_on:
-      - forward-basic-auth
-      - web
-
-  forward-basic-auth:
-    build:
-      context: .
-      args:
-        - version=${VERSION}
-    volumes:
-      - db:/mnt/db
-    labels:
-      - traefik.enable=true
-      - traefik.http.services.auth.loadbalancer.server.port=4013
-      - traefik.http.routers.auth.middlewares=forward-basic-auth
-      - traefik.http.middlewares.forward-basic-auth.forwardauth.address=http://forward-basic-auth:4013/auth
-      - traefik.http.middlewares.forward-basic-auth.forwardauth.authResponseHeaders=X-Auth-User
-
-  init-forward-basic-auth:
-    image: alpine:3.14
-    command:
-      - sh
-      - -c
-      - apk add curl && sleep 1 && curl -X PUT 'http://forward-basic-auth:4013/users' --data-raw '{"user":"pass"}' -v
-    depends_on:
-      - forward-basic-auth
 
   web:
     image: traefik/whoami
@@ -46,9 +20,23 @@ services:
       - traefik.enable=true
       - traefik.http.routers.web.rule=HostRegexp(`{host:.*}`)
       - traefik.http.services.web.loadbalancer.server.port=80
+      - traefik.http.middlewares.forward-basic-auth.forwardauth.address=http://forward-basic-auth:4013/auth
+      - traefik.http.middlewares.forward-basic-auth.forwardauth.authResponseHeaders=X-Auth-User
       - traefik.http.routers.web.middlewares=forward-basic-auth
+
+  forward-basic-auth:
+    image: ghcr.io/spuf/forward-basic-auth
+    volumes:
+      - forward-basic-auth-data:/var/forward-basic-auth
+
+  init-forward-basic-auth:
+    image: alpine:3.14
+    command:
+      - sh
+      - -c
+      - apk add curl && curl -X PUT 'http://forward-basic-auth:4013/users' --data-raw '{"user":"pass"}' -v
     depends_on:
       - forward-basic-auth
 
 volumes:
-  db:
+  forward-basic-auth-data:
