@@ -20,6 +20,15 @@ func NewUsersStore() *UsersStore {
 	return usersStore
 }
 
+func (s *UsersStore) Reset() {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	for username := range s.creds {
+		delete(s.creds, username)
+	}
+}
+
 func (s *UsersStore) Set(username, password string) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
