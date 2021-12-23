@@ -116,9 +116,12 @@ func NewServer(cfg config) http.Handler {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
+
+		cfg.store.Reset()
 		for username, password := range *data {
 			cfg.store.Set(username, password)
 		}
+
 		if err := cfg.store.Save(cfg.path); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
