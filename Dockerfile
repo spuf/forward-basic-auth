@@ -18,7 +18,7 @@ RUN go mod verify
 
 COPY . ./
 
-RUN golangci-lint run ./...
+RUN golangci-lint run ./... --timeout=10m
 
 ###
 FROM base as build
