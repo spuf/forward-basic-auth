@@ -8,7 +8,7 @@ FROM golang:${go_version}-alpine${alpine_version} AS base
 RUN apk add --no-cache curl git build-base
 
 ARG golangci_version=1.45.2
-RUN curl -sSfL 'https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh' | sh -s "v${golangci_version}"
+RUN wget -O- -nv 'https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh' | sh -s "v${golangci_version}"
 
 WORKDIR /go/src/forward-basic-auth
 
