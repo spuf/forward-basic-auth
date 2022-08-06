@@ -1,8 +1,8 @@
 build:
-	docker-compose build
+	docker compose build
 
 run: build
-	docker-compose up
+	docker compose up
 
 logs:
-	-docker-compose logs
+	-docker compose logs
