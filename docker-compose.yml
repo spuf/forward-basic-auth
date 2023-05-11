@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   traefik:
-    image: traefik:v2.5
+    image: traefik:v2.10
     command: --api.dashboard --api.insecure --providers.docker --providers.docker.exposedbydefault=false
     ports:
       - "3000:80"
@@ -32,7 +32,7 @@ services:
       - traefik.http.middlewares.forward-basic-auth.forwardauth.authResponseHeaders=X-Auth-User
 
   init-forward-basic-auth:
-    image: alpine:3.14
+    image: alpine:3.17
     command:
       - sh
       - -c
